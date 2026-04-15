@@ -1,0 +1,109 @@
+\documentclass[11pt]{standalone}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[no-math]{fontspec}
+\usepackage{unicode-math}
+\usepackage{libertinus}
+\usepackage{pgf,xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\definecolor{my_darkgray}{HTML}{484949}
+\definecolor{my_lightgray}{HTML}{F3F4F4}
+\definecolor{my_darkblue}{HTML}{005A94}
+\definecolor{my_lightblue}{HTML}{CCDEE9}
+\definecolor{my_yellow}{HTML}{FFEC7F}
+\definecolor{my_red}{HTML}{E60000}
+\definecolor{my_orange}{HTML}{E87846}
+
+\begin{document}
+\begin{tikzpicture}[
+    show background rectangle,
+    background rectangle/.style={fill=my_lightgray, rounded corners=8pt},
+    inner frame sep=0.8cm
+]
+  \begin{axis}[
+    % axis equal omitted: x-domain spans 30 units, y-domain ~5 units;
+    % equal scaling would produce an unreadably wide figure.
+    width  = 10cm,
+    height = 7cm,
+    axis lines      = center,
+    axis line style = {thick, my_darkgray},
+    xlabel          = {$x$ [cm]},
+    ylabel          = {$f(x)$ [cm]},
+    xlabel style    = {color=my_darkgray, at={(axis description cs:1,0)},
+                       anchor=north west},
+    ylabel style    = {color=my_darkgray, at={(axis description cs:0,1)},
+                       anchor=south east},
+    xmin = -2,  xmax = 34,
+    ymin = -0.5, ymax = 7.5,
+    xtick      = {0, 5, 10, 15, 20, 25, 30},
+    ytick      = {0, 1, 2, 3, 4, 5, 6},
+    tick style = {color=my_darkgray},
+    tick label style = {color=my_darkgray, font=\small},
+    grid            = both,
+    grid style      = {color=my_lightblue, thin},
+    major grid style= {color=my_lightblue},
+  ]
+
+    %% Parabolic marble track f(x) = 0.02x^2 - 0.6x + 6
+    \addplot[
+      draw    = my_lightblue,
+      samples = 300,
+      ultra thick,
+      domain  = 0:30,
+    ]{ 0.02*x^2 - 0.6*x + 6 };
+
+    %% Secant line through P1=(5,3.5) and P2=(20,2): y = -0.1x + 4
+    %% Extended beyond both points for x in [-1, 26]
+    \addplot[
+      draw   = my_red,
+      thick,
+      domain = -1:26,
+    ]{ -0.1*x + 4 };
+
+    %% Points P1 and P2
+    \addplot[
+      only marks,
+      mark      = *,
+      mark size = 3pt,
+      draw      = my_red,
+      fill      = my_red,
+    ] coordinates { (5, 3.5) (20, 2) };
+
+    %% Labels for P1 and P2
+    \node[color=my_darkgray, above left, font=\small]
+      at (axis cs:8.5, 2.5) {$P_1 = (5,\;3.5)$};
+    \node[color=my_darkgray, below right, font=\small]
+      at (axis cs:20, 2) {$P_2 = (20,\;2)$};
+
+    %% Dashed horizontal helper line from P1 across to x=20 at height 3.5
+    \draw[color=my_darkgray, dashed, thick]
+      (axis cs:5, 3.5) -- (axis cs:20, 3.5);
+
+    %% Right-angle mark at (20, 3.5)
+    %% Two short segments forming an L; offsets chosen to look square
+    %% given the non-equal axis scaling (x: 36 units / 10 cm, y: 8 units / 7 cm)
+    %% dx = 1.3 axis units = 0.361 cm; dy = 0.41 axis units = 0.359 cm => ~square
+    \draw[color=my_darkgray, thin]
+      (axis cs:18.7, 3.5) -- (axis cs:18.7, 3.09) -- (axis cs:20, 3.09);
+
+    %% Vertical arrow for Δf: from (20, 3.5) down to (20, 2)
+    \draw[color=my_darkgray, thick, -Stealth]
+      (axis cs:20, 3.5) -- (axis cs:20, 2);
+    \node[color=my_darkgray, right, font=\small]
+      at (axis cs:20, 2.75)
+      {$\Delta f = -1.5~\text{cm}$};
+
+    %% Horizontal arrow for Δx: from (5, 3.5) to (20, 3.5)
+    \draw[color=my_darkgray, thick, -Stealth]
+      (axis cs:5, 3.5) -- (axis cs:20, 3.5);
+    \node[color=my_darkgray, above, font=\small]
+      at (axis cs:12.5, 3.5)
+      {$\Delta x = 15~\text{cm}$};
+
+  \end{axis}
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,78 @@
+\documentclass[11pt]{standalone}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[no-math]{fontspec}
+\usepackage{unicode-math}
+\usepackage{libertinus}
+\usepackage{pgf,xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+% circuitikz is required for this figure only
+\usepackage[european, straightvoltages]{circuitikz}
+
+\definecolor{my_darkgray}{HTML}{484949}
+\definecolor{my_lightgray}{HTML}{F3F4F4}
+\definecolor{my_darkblue}{HTML}{005A94}
+\definecolor{my_lightblue}{HTML}{CCDEE9}
+\definecolor{my_yellow}{HTML}{FFEC7F}
+\definecolor{my_red}{HTML}{E60000}
+\definecolor{my_orange}{HTML}{E87846}
+
+\begin{document}
+\begin{circuitikz}[
+    show background rectangle,
+    background rectangle/.style={fill=my_lightgray, rounded corners=8pt},
+    inner frame sep=0.8cm,
+    color=my_darkblue,
+    /tikz/text=my_darkgray,
+]
+
+% Circuit layout:
+%   Bottom-left (0,0) -- bottom-right (6,0): return wire
+%   Left side (0,0) to (0,4): voltage source U_0
+%   Top-left (0,4): switch S (open position)
+%   Top wire with resistor R from switch to top-right corner
+%   Capacitor C on the right side (6,4) to (6,0)
+
+% Voltage source on the left side (bottom to top)
+\draw (0,0) to[battery1, v_=$U_0$, color=my_darkblue] (0,4);
+
+% Wire from voltage source to switch pivot
+\draw[my_darkblue, thick] (0,4) -- (1.0,4);
+
+% Pivot dot
+\filldraw[my_darkblue] (1.0,4) circle (2pt);
+
+% Tilted switch blade (open position: rotated ~25 degrees upward)
+\draw[my_darkblue, thick] (1.0,4) -- (1.85,4.4);
+
+% Fixed contact dot
+\filldraw[my_darkblue] (2.0,4) circle (2pt);
+
+% Wire from fixed contact to resistor
+\draw[my_darkblue, thick] (2.0,4) -- (2.7,4);
+
+% Label S above the switch blade
+\node[above, font=\small, my_darkgray] at (1.5,4.45) {$S$};
+
+% Resistor on the top wire
+\draw (2.7,4) to[R, l=$R$, color=my_darkblue] (5.5,4);
+
+% Top-right corner wire to capacitor
+\draw[my_darkblue] (5.5,4) -- (6,4);
+
+% Capacitor on the right side (top to bottom), voltage label U_C
+\draw (6,4) to[C, l_=$C$, v^=$U_C$, color=my_darkblue] (6,0);
+
+% Bottom return wire
+\draw[my_darkblue] (6,0) -- (0,0);
+
+% Ground symbol at bottom-left corner
+\draw[my_darkblue, thick] (-0.3,0)      -- (0.3,0);
+\draw[my_darkblue, thick] (-0.15,-0.12) -- (0.15,-0.12);
+\draw[my_darkblue, thick] (-0.03,-0.24) -- (0.03,-0.24);
+
+\end{circuitikz}
+\end{document}

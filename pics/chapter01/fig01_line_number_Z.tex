@@ -1,0 +1,34 @@
+\documentclass[12pt]{standalone}
+
+
+\usepackage{amssymb} 
+\usepackage{amsmath} 
+
+\usepackage[no-math]{fontspec}
+\usepackage{unicode-math}
+\setmainfont{TeX Gyre Heros}
+\setmathfont{Stix Two Math}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, backgrounds}
+
+\usepackage{xcolor}
+\definecolor{itwm_blue_04}{HTML}{005A94}
+\definecolor{bgcolor}{HTML}{F3F4F4}
+\usepackage{nicefrac}
+
+\begin{document}
+\begin{tikzpicture}[
+    show background rectangle,
+    background rectangle/.style={fill=bgcolor, rounded corners=8pt},
+    inner frame sep=0.3cm
+]
+
+	\draw [-{Triangle}, thick] (-5.8,0) -- (5.8,0);
+	\foreach \x in {-5,...,5} {
+        \draw[thick](\x,0.1) -- (\x,-0.1);
+        \node[below] at (\x,-0.1) {\x};
+    }
+\node[above] at (5.3,0.2) {$\mathbb{Z}$};
+\end{tikzpicture}
+\end{document}
