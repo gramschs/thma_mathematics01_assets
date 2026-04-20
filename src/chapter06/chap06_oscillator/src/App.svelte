@@ -243,6 +243,7 @@
 
   /* ── Container ──────────────────────────────────────────────────────────── */
   .applet {
+    color-scheme: light;   /* ← neu: native Controls immer im Light-Mode */
     font-family: var(--font-body);
     color: var(--text);
     background: var(--surface);
@@ -264,6 +265,7 @@
     font-size: 1.1rem;
     font-weight: normal;
     letter-spacing: .02em;
+    color: var(--text);   /* ← neu: explizit, schlägt die globale Regel */
   }
   header p {
     margin-top: 5px;
