@@ -2,9 +2,9 @@
   ═══════════════════════════════════════════════════════════════════════════════
   App.svelte  -  App 3: Damped Oscillator
   Shows x(t) = A e^{−δt} cos(ω_d t) together with the exponential envelope
-  ±A e^{−δt}.  Three sliders vary A (initial displacement, m), δ (damping
-  exponent, s⁻¹), and ω_d (damped natural frequency, rad/s).
-  Default values match the textbook example in section 6.3.
+  ±A e^{−δt}.  Two sliders vary A (initial displacement, m) and δ (damping
+  exponent, s⁻¹).  The damped frequency ω_d = 3 rad/s is kept fixed, matching
+  the textbook example in section 6.3.
   ═══════════════════════════════════════════════════════════════════════════════
 -->
 
@@ -19,10 +19,11 @@
   const plotH = VH - PAD.top  - PAD.bottom;
 
   // ── Math domain ───────────────────────────────────────────────────────────
-  const tMin = 0;
-  const tMax = 10;     // s
-  const yMin = -0.23;
-  const yMax =  0.23;
+  const tMin    =  0;
+  const tMax    = 10;     // s — 10 s covers ~4.8 periods at ω_d = 3 rad/s
+  const yMin    = -0.23;
+  const yMax    =  0.23;
+  const omega_d =  3;     // rad/s — fixed, as in section 6.3
 
   // ── Coordinate transforms (math → SVG pixels) ────────────────────────────
   const toSvgX = t => PAD.left + (t - tMin) / (tMax - tMin) * plotW;
@@ -42,18 +43,14 @@
   const C_DOT  = '#005a94';   // my_darkblue  – initial-condition marker
 
   // ── Reactive slider state ─────────────────────────────────────────────────
-  let A       = 0.10;   // initial displacement [m],   range 0.02 … 0.20
-  let delta   = 0.50;   // damping exponent     [s⁻¹], range 0.10 … 2.00
-  let omega_d = 3.00;   // damped frequency     [rad/s], range 0.5 … 10.0
+  let A     = 0.10;   // initial displacement [m],   range 0.02 … 0.20
+  let delta = 0.50;   // damping exponent     [s⁻¹], range 0.10 … 2.00
 
   // ── Reactive derived quantities ───────────────────────────────────────────
   // Half-life of the amplitude envelope: A e^{−δ t₁/₂} = A/2  ⟹  t₁/₂ = ln2 / δ
   $: halfLife = (Math.log(2) / delta).toFixed(2);
 
-  // Period of the damped oscillation: T = 2π / ω_d
-  $: period = (2 * Math.PI / omega_d).toFixed(2);
-
-  // Initial velocity from section 6.3: v(0) = −A δ
+  // Initial velocity from section 6.3: v(0) = −A δ (the cos term dominates at t = 0)
   $: v0 = (-A * delta).toFixed(3);
 
   // Polyline point strings – recomputed whenever A or delta changes
@@ -88,10 +85,9 @@
     <p>
       Position of a mass–spring–damper system:
       <em>x</em>(<em>t</em>) = <em>A</em> e<sup>−δ<em>t</em></sup>
-      cos(ω<sub>d</sub> <em>t</em>).
-      Adjust <em>A</em> (initial displacement), δ (damping exponent), and
-      ω<sub>d</sub> (damped natural frequency) to see how each parameter
-      shapes the motion. The orange dashed curves are the
+      cos(ω<sub>d</sub> <em>t</em>), with ω<sub>d</sub> = 3 rad/s fixed.
+      Adjust <em>A</em> (initial displacement) and δ (damping exponent) to see
+      how the amplitude decays. The orange dashed curves are the
       envelope ±<em>A</em> e<sup>−δ<em>t</em></sup>.
     </p>
   </header>
@@ -190,18 +186,9 @@
     <div class="slider-row">
       <label for="sl-delta">δ</label>
       <input id="sl-delta" type="range"
-             min="0.00" max="2.00" step="0.05"
+             min="0.10" max="2.00" step="0.05"
              bind:value={delta} />
       <span class="sl-val">{delta.toFixed(2)} s⁻¹</span>
-    </div>
-
-    <!-- ω_d slider -->
-    <div class="slider-row">
-      <label for="sl-omega">ω<sub>d</sub></label>
-      <input id="sl-omega" type="range"
-             min="0.5" max="10.0" step="0.1"
-             bind:value={omega_d} />
-      <span class="sl-val">{omega_d.toFixed(1)} rad/s</span>
     </div>
 
   </div>
@@ -217,16 +204,6 @@
     <div class="info-tile">
       <span class="info-lbl">δ (s⁻¹)</span>
       <span class="info-val">{delta.toFixed(2)}</span>
-    </div>
-
-    <div class="info-tile">
-      <span class="info-lbl">ω<sub>d</sub> (rad/s)</span>
-      <span class="info-val">{omega_d.toFixed(1)}</span>
-    </div>
-
-    <div class="info-tile">
-      <span class="info-lbl">Period T (s)</span>
-      <span class="info-val">{period}</span>
     </div>
 
     <div class="info-tile">
@@ -388,7 +365,7 @@
   }
   .info-tile {
     flex: 1;
-    padding: 12px 10px;
+    padding: 12px 16px;
     display: flex;
     flex-direction: column;
     gap: 2px;
