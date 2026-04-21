@@ -170,7 +170,7 @@
 
   <!-- Main SVG -->
   <div class="chart-wrap">
-    <svg viewBox="0 0 {W} {H}" preserveAspectRatio="xMidYMid meet"
+    <svg viewBox="0 70 {W} {H - 70}" preserveAspectRatio="xMidYMid meet"
          role="img"
          aria-label="Animated mass-spring-damper system on the left, displacement graph on the right">
 
