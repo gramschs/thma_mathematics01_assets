@@ -16,7 +16,7 @@ fi
 
 # Set directories
 SOURCE_DIR="$FOLDER"
-DEST_DIR="../../thma_mathematics01/$FOLDER/pics/"
+DEST_DIR="../../book_en/$FOLDER/pics/"
 
 # Create destination directory if it doesn't exist
 #mkdir -p "$DEST_DIR"
